@@ -77,7 +77,7 @@ public class CreateGraph extends JFrame {
 	
 	public CreateGraph(Window window) 
 	{
-		this.setVisible(true);
+		
 		this.window = window;
 		setTitle("Create Graph");
 		
@@ -374,11 +374,8 @@ public class CreateGraph extends JFrame {
 		contentPane.add(comboSenOneY3, "3, 10, fill, top");
 		contentPane.add(comboSenTwoY3, "7, 10, fill, top");
 		
-		
-		
-		
 		enableSeries();
-		
+		this.setVisible(true);
 	}
 
 	public void changeNumberOfSeries(int number)

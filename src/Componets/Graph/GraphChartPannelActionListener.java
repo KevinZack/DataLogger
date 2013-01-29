@@ -17,6 +17,7 @@ public class GraphChartPannelActionListener implements ChartMouseListener
 	public double currentY = 0;
 	public int seriesIndex =0;
 	public Rectangle2D plotRectangle;
+	public  double  bestDistanceFoundYetX;
 	
 	public GraphChartPannelActionListener(GraphChartPanel graphChartPanel, CopyOfGraph createGraph, XYSeries series1)
 	{
@@ -27,7 +28,6 @@ public class GraphChartPannelActionListener implements ChartMouseListener
 
 	public void chartMouseClicked(ChartMouseEvent e) 
 	{
-		
 		createGraph.addMarker(currentX, seriesIndex, plotRectangle);
     }
 
@@ -38,34 +38,29 @@ public class GraphChartPannelActionListener implements ChartMouseListener
 
         plotRectangle =  graphChartPanel.getChartRenderingInfo().getPlotInfo().getDataArea().getBounds();
         
-        double mousetPosition = arg0.getTrigger().getX() - (series1.getX(4).doubleValue() - series1.getX(3).doubleValue());
-        
+        double mousetPosition = arg0.getTrigger().getX();// - (series1.getX(4).doubleValue() - series1.getX(3).doubleValue());
+       
         final double chartX = domainAxis.java2DToValue(mousetPosition , plotRectangle, plot.getDomainAxisEdge());
-         	  	  
-        double  bestDistanceFoundYetX = series1.getMaxX();
+        
         int seriesXIndex = 0;
         
-        bestDistanceFoundYetX = bestDistanceFoundYetX*bestDistanceFoundYetX;
+        bestDistanceFoundYetX = series1.getMaxX();
         
         for(int i = 0; i < series1.getItemCount()  ; i++)
         {
         	double d = Math.abs(chartX - series1.getX(i).doubleValue());
-         	d= d*d;
-         	if (d <= bestDistanceFoundYetX) 
+         	if (d < bestDistanceFoundYetX) 
 			{
-         		bestDistanceFoundYetX = series1.getX(i).doubleValue();
+         		bestDistanceFoundYetX = d;
 				seriesXIndex = i;
 			}
-         }
+        }  
+        currentX = series1.getX(seriesXIndex).doubleValue();
+        currentY = series1.getY(seriesXIndex).doubleValue();
+         
+        seriesIndex = seriesXIndex;
 
-         currentX = series1.getX(seriesXIndex).doubleValue();
-         currentY = series1.getY(seriesXIndex).doubleValue();
-         
-         seriesIndex = seriesXIndex;
-
-         
-         graphChartPanel.getChart().getXYPlot().setDomainCrosshairValue(currentX);
-         graphChartPanel.getChart().getXYPlot().setRangeCrosshairValue(currentY);  
-         
+        graphChartPanel.getChart().getXYPlot().setDomainCrosshairValue(currentX);
+        graphChartPanel.getChart().getXYPlot().setRangeCrosshairValue(currentY);  
     }
 }

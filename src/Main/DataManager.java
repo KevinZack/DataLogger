@@ -18,7 +18,6 @@ public class DataManager extends Thread
 	public ConnectArduino connectArduino;
 	public SocketConnection socketConnection;
 	public SerialPort serialPort;
-//	private Socket socket;
 	private InputStream inputStream;
 	public boolean connected = true;
 	public boolean emulator = false;
@@ -116,7 +115,6 @@ public class DataManager extends Thread
 		{
 			while(connected)
 			{
-				
 				time = System.currentTimeMillis() - startTime;
 				count++;
 				yValue = Math.sin(count*.1);
@@ -136,8 +134,7 @@ public class DataManager extends Thread
 	                     ((ICompleteRevieveEventListener)listeners[i+1]).CompleteRevieveEventHandler(complete);
 	                 }
 	            } 		
-				
-				try {Thread.sleep(3);} catch (InterruptedException e) {e.printStackTrace();}
+				try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
 	}

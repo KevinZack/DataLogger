@@ -20,8 +20,5 @@ public class ConnectSocketActionListener implements ActionListener
 		System.out.println("Attempting Socket Conenction");
 		connect.frame.setVisible(false);
 		new AttemptingSocket();
-			
-		
-		 
 	}
 }

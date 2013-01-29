@@ -535,7 +535,6 @@ public class Window extends JFrame
 		    {
 		    	if(takeData)
 		    	{
-			    	
 			    	timeArea.append(df.format(data.time)+"\n");
 			    	timeArea.setCaretPosition(timeArea.getDocument().getLength());
 			    		
@@ -554,9 +553,11 @@ public class Window extends JFrame
 			    		sensorOneMinValue = data.sensorOne;
 			    		sensorOneMin.setText(df.format(data.sensorOne));
 			    	}
+			    	
 			    	sensorOneArea.append(df.format(data.sensorOne)+"\n");
 			    	sensorOneAve.setText(df.format((double)parsing.totalSensorOne/parsing.totalEntries));
 			    	sensorOneArea.setCaretPosition(sensorOneArea.getDocument().getLength());
+			    	
 			    	
 			    	if(size > 1)
 			    	{
@@ -597,6 +598,7 @@ public class Window extends JFrame
 				    	tempString += ",";
 			    		tempString += df.format(data.sensorThree);
 					}
+			    	
 			    	if(size > 3)
 					{
 				    	if(data.sensorFour > sensorFourMaxValue && size > 3)
@@ -615,6 +617,7 @@ public class Window extends JFrame
 				    	tempString += ",";
 				    	tempString += df.format(data.sensorFour);
 					}
+			    	
 			    	if(size > 4)
 					{
 			    		if(data.sensorFive > sensorFiveMaxValue)
@@ -633,6 +636,7 @@ public class Window extends JFrame
 				    	tempString += ",";
 				    	tempString += df.format(data.sensorFive);
 					}
+			    	
 			    	if(size > 5)
 					{
 			    		if(data.sensorSix > sensorSixMaxValue)

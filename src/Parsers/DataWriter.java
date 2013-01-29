@@ -21,16 +21,18 @@ public class DataWriter extends Thread
 		Date date = new Date();
 		if(type.equals("Raw"))
 		{
+			createDirectoryIfNeeded("Log");
 			createDirectoryIfNeeded("Log/Raw");
 			filePath = "Log/Raw/Raw_"+dateFormat.format(date)+".csv";
 		}
 		else if(type.equals("Formated"))
 		{
+			createDirectoryIfNeeded("Log");
 			createDirectoryIfNeeded("Log/Formated");
 			filePath = "Log/Formated/Formated_"+dateFormat.format(date)+".csv";
 		}
 		FileWriter fstream = null;
-		
+
 		try 
 		{
 			fstream = new FileWriter(filePath);

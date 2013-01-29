@@ -296,7 +296,6 @@ public class CopyOfGraph
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,}));
 		
-		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, "2, 2, 11, 1, fill, fill");
 		
@@ -325,14 +324,10 @@ public class CopyOfGraph
 			chart = ChartFactory.createScatterPlot(title, xAxisLable, yAxisLable, dataset,
 				PlotOrientation.VERTICAL, true, true, false);
 		}
-		
-		
-		
+			
 		chart.setBackgroundPaint(Color.white);
 		panel.setLayout(new BorderLayout(0, 0));
-		
-		
-         
+     
 		CP = new GraphChartPanel(chart);
 		
 		CP.setMaximumDrawWidth(1023);
@@ -364,12 +359,8 @@ public class CopyOfGraph
 		frame.pack();
 	}
 	
-
-
-	
 	public void close()
 	{
 		DataManager.removePayloadUpdateEvent(listener);
 	}
-
 }

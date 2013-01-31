@@ -16,7 +16,7 @@ public class SeriesRadialActionListener implements ActionListener
 	
 	public void actionPerformed(ActionEvent arg0) 
 	{
-		graph.useSeries = seriesRadial.seriesNumber;
+	//	graph.useSeries = seriesRadial.seriesNumber;
 	}
 
 }

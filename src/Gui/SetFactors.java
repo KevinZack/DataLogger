@@ -72,7 +72,7 @@ public class SetFactors extends JFrame {
 
 		int verticalSize = 135+ (size)*30;
 
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(355,verticalSize);
 		this.setResizable(false);
 		contentPane = new JPanel();

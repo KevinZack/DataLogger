@@ -3,7 +3,6 @@ package Gui;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.DimensionUIResource;
 import Componets.Graph.GraphButtonMenuItem;
 import Componets.MenueItems.DecimalPacesMenuItem;
 import Componets.MenueItems.ResetAveMenuItem;
@@ -23,21 +22,17 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import javax.swing.JLabel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JTextArea;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
 import java.text.DecimalFormat;
-import javax.swing.JScrollPane;
 
 public class Window extends JFrame
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 3363174406354567246L;
 	private JPanel contentPane;
 	public JTextField time;
@@ -70,22 +65,15 @@ public class Window extends JFrame
 	public JTextField sensorFiveAve;
 	public JTextField sensorSixAve;
 	
-	private JScrollPane timeAreaScroll;
-	private JScrollPane sensorOneScroll;
-	private JScrollPane SensorTwoScroll;
-	private JScrollPane SensorThreeScroll;
-	private JScrollPane SensorFourScroll;
-	private JScrollPane SensorFiveScroll;
-	private JScrollPane SensorSixScroll;
-	
-	private JTextArea timeArea;
-	private JTextArea sensorOneArea;
-	private JTextArea sensorTwoArea;
-	private JTextArea sensorThreeArea;
-	private JTextArea sensorFourArea;
-	private JTextArea sensorFiveArea;
-	private JTextArea sensorSixArea;
+	private JTextField timeArea;
+	private JTextField sensorOneArea;
+	private JTextField sensorTwoArea;
+	private JTextField sensorThreeArea;
+	private JTextField sensorFourArea;
+	private JTextField sensorFiveArea;
+	private JTextField sensorSixArea;
 
+	private JTextArea txtrDataloggerV;
 	public boolean takeData = true;
 	public boolean record = false;
 	public boolean createRecord = true;
@@ -107,6 +95,7 @@ public class Window extends JFrame
 	private JMenu mnGraph;
 	private JMenu mnConfigure;
 	private JMenu mnReset;
+	private JMenu mnAbout;
 	private ResetAveMenuItem resetAveMenuItem;
 	private ResetMinMaxMenuItem resetMinMaxMenuItem;
 	private SetFactorsMenuItem setFactorsMenuItem;
@@ -139,15 +128,17 @@ public class Window extends JFrame
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		int minSizeHorzontal = 325 +(150*(size-1));
-		this.setSize(minSizeHorzontal, 500);
+//		int minSizeHorzontal = 300 +(40*(size-1));
+		this.setSize(803, 230);
 		
-		this.setMinimumSize(new DimensionUIResource(minSizeHorzontal, 500));
+		this.setResizable(false);
 		menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
 		mnGraph = new JMenu("Graph");
 		menuBar.add(mnGraph);
+		
+		
 		
 		graphButtonMenuItem = new GraphButtonMenuItem("Create Graph");
 		mnGraph.add(graphButtonMenuItem);
@@ -204,6 +195,26 @@ public class Window extends JFrame
 		mnErrors = new JMenu("Errors");
 		menuBar.add(mnErrors);
 		
+		mnAbout = new JMenu("About");
+		menuBar.add(mnAbout);
+		txtrDataloggerV = new JTextArea();
+		String aboutString = "DataLogger V1.0\n";
+		aboutString +=       "_______________\n";
+		aboutString += 		 "Author: Kevin Zack\n";
+		aboutString += 		 "_______________\n";
+		aboutString +=       "Libarys Used:  \n";
+		aboutString +=       "RXTXcomm \n";
+		aboutString +=       "froms-1.3.0 \n";
+		aboutString +=       "JFreeChart  \n";
+		aboutString +=       "JFreeCommon \n";
+		aboutString += 		 "_______________\n";
+		aboutString += 		 "Questions? Comments?\n";
+		aboutString += 		 "KZackelectric@gmail.com";
+		
+		txtrDataloggerV.setText(aboutString);
+		mnAbout.add(txtrDataloggerV);
+		
+		
 		showErrorsMenuItem = new ShowErrorsMenuItem();
 		mnErrors.add(showErrorsMenuItem);
 		showErrorsMenuItem.setActionListener(parsing, this);
@@ -218,27 +229,35 @@ public class Window extends JFrame
 		String colOne = "max(70dlu;default):grow";
 		String colTwo = "max(70dlu;default):grow";
 		String colThree = "max(70dlu;default):grow";
+		String colThreeSub = "max(4dlu;default)";
 		String colFour = "max(70dlu;default):grow";
+		String colFourSub = "max(4dlu;default)";
 		String colFive = "max(70dlu;default):grow";
+		String colFiveSub = "max(4dlu;default)";
 		String colSix = "max(70dlu;default):grow";
+		String colSixSub = "max(4dlu;default)";
 		String colSeven = "max(70dlu;default):grow";
 
 		
 		if(size < 2)
 		{
 			colThree = "max(0dlu;default)";
+			colThreeSub = "max(0dlu;default)";
 		}
 		if(size < 3)
 		{
 			colFour = "max(0dlu;default)";
+			colFourSub = "max(0dlu;default)";
 		}
 		if(size < 4)
 		{
 			colFive = "max(0dlu;default)";
+			colFiveSub = "max(0dlu;default)";
 		}
 		if(size < 5)
 		{
 			colSix = "max(0dlu;default)";
+			colSixSub = "max(0dlu;default)";
 		}
 		if(size < 6)
 		{
@@ -252,19 +271,19 @@ public class Window extends JFrame
 				ColumnSpec.decode(colTwo),
 				FormFactory.RELATED_GAP_COLSPEC,
 				ColumnSpec.decode(colThree),
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode(colThreeSub),
 				ColumnSpec.decode(colFour),
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode(colFourSub),
 				ColumnSpec.decode(colFive),
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode(colFiveSub),
 				ColumnSpec.decode(colSix),
-				FormFactory.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode(colSixSub),
 				ColumnSpec.decode(colSeven),},
 			new RowSpec[] {
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
-				RowSpec.decode("default:grow"),
+				RowSpec.decode("max(2dlu;default)"),
 				FormFactory.RELATED_GAP_ROWSPEC,
 				FormFactory.DEFAULT_ROWSPEC,
 				FormFactory.RELATED_GAP_ROWSPEC,
@@ -280,13 +299,6 @@ public class Window extends JFrame
 		time.setColumns(10);
 		contentPane.add(time, "2, 2, fill, default");
 		
-		timeAreaScroll = new JScrollPane();
-		contentPane.add(timeAreaScroll, "2, 4, fill, fill");
-		
-		timeArea = new JTextArea();
-		timeAreaScroll.setViewportView(timeArea);
-		timeArea.setColumns(1);
-		
 /************************************************************************/				
 		sensorOne = new JTextField();
 		sensorOne.setHorizontalAlignment(SwingConstants.CENTER);
@@ -294,11 +306,12 @@ public class Window extends JFrame
 		contentPane.add(sensorOne, "4, 2, fill, default");
 		sensorOne.setColumns(10);
 		
-		sensorOneScroll = new JScrollPane();
-		contentPane.add(sensorOneScroll, "4, 4, fill, fill");
+		timeArea = new JTextField();
+		contentPane.add(timeArea, "2, 4");
+		timeArea.setColumns(1);
 		
-		sensorOneArea = new JTextArea();
-		sensorOneScroll.setViewportView(sensorOneArea);
+		sensorOneArea = new JTextField();
+		contentPane.add(sensorOneArea, "4, 4");
 		
 		sensorOneMax = new JTextField();
 		sensorOneMax.setEditable(false);
@@ -324,11 +337,11 @@ public class Window extends JFrame
 			contentPane.add(sensorTwo, "6, 2, fill, default");
 			sensorTwo.setColumns(10);
 			
-			SensorTwoScroll = new JScrollPane();
-			contentPane.add(SensorTwoScroll, "6, 4, fill, fill");
+			sensorTwoArea = new JTextField();
+			contentPane.add(sensorTwoArea, "6, 4, fill, fill");
 			
-			sensorTwoArea = new JTextArea();
-			SensorTwoScroll.setViewportView(sensorTwoArea);
+//			sensorTwoArea = new JTextArea();
+//			SensorTwoScroll.setViewportView(sensorTwoArea);
 			
 			sensorTwoMax = new JTextField();
 			sensorTwoMax.setEditable(false);
@@ -354,11 +367,11 @@ public class Window extends JFrame
 			contentPane.add(sensorThree, "8, 2, fill, default");
 			sensorThree.setColumns(10);
 	
-			SensorThreeScroll = new JScrollPane();
-			contentPane.add(SensorThreeScroll, "8, 4, fill, fill");
+			sensorThreeArea = new JTextField();
+			contentPane.add(sensorThreeArea, "8, 4, fill, fill");
 			
-			sensorThreeArea = new JTextArea();
-			SensorThreeScroll.setViewportView(sensorThreeArea);
+//			sensorThreeArea = new JTextArea();
+//			SensorThreeScroll.setViewportView(sensorThreeArea);
 			
 			sensorThreeMax = new JTextField();
 			sensorThreeMax.setEditable(false);
@@ -384,11 +397,11 @@ public class Window extends JFrame
 			contentPane.add(sensorFour, "10, 2, fill, default");
 			sensorFour.setColumns(10);
 			
-			SensorFourScroll = new JScrollPane();
-			contentPane.add(SensorFourScroll, "10, 4, fill, fill");
+			sensorFourArea = new JTextField();
+			contentPane.add(sensorFourArea, "10, 4, fill, fill");
 			
-			sensorFourArea = new JTextArea();
-			SensorFourScroll.setViewportView(sensorFourArea);
+//			sensorFourArea = new JTextArea();
+//			SensorFourScroll.setViewportView(sensorFourArea);
 			
 			sensorFourMax = new JTextField();
 			sensorFourMax.setEditable(false);
@@ -414,12 +427,12 @@ public class Window extends JFrame
 		contentPane.add(sensorFive, "12, 2, fill, default");
 		sensorFive.setColumns(10);
 		
-		SensorFiveScroll = new JScrollPane();
-		contentPane.add(SensorFiveScroll, "12, 4, fill, fill");
+		sensorFiveArea = new JTextField();
+		contentPane.add(sensorFiveArea, "12, 4, fill, fill");
 		
-		sensorFiveArea = new JTextArea();
-		SensorFiveScroll.setViewportView(sensorFiveArea);
-		
+//		sensorFiveArea = new JTextArea();
+//		SensorFiveScroll.setViewportView(sensorFiveArea);
+//		
 		sensorFiveMax = new JTextField();
 		sensorFiveMax.setEditable(false);
 		contentPane.add(sensorFiveMax, "12, 6, fill, default");
@@ -446,11 +459,11 @@ public class Window extends JFrame
 		sensorSix.setHorizontalAlignment(SwingConstants.CENTER);
 		sensorSix.setColumns(10);
 		
-		SensorSixScroll = new JScrollPane();
-		contentPane.add(SensorSixScroll, "14, 4, fill, fill");
+		sensorSixArea = new JTextField();
+		contentPane.add(sensorSixArea, "14, 4, fill, fill");
 		
-		sensorSixArea = new JTextArea();
-		SensorSixScroll.setViewportView(sensorSixArea);
+//		sensorSixArea = new JTextArea();
+//		SensorSixScroll.setViewportView(sensorSixArea);
 		
 		sensorSixMax = new JTextField();
 		sensorSixMax.setEditable(false);
@@ -535,7 +548,9 @@ public class Window extends JFrame
 		    {
 		    	if(takeData)
 		    	{
-			    	timeArea.append(df.format(data.time)+"\n");
+			    	//timeArea.append(df.format(data.time)+"\n");
+			    	timeArea.setText(df.format(data.time)+"\n");
+			    	
 			    	timeArea.setCaretPosition(timeArea.getDocument().getLength());
 			    		
 			    	String tempString = "";
@@ -547,6 +562,7 @@ public class Window extends JFrame
 			    	{
 			    		sensorOneMaxValue = data.sensorOne;
 			    		sensorOneMax.setText(df.format(data.sensorOne));
+			    		
 			    	}
 			    	if(data.sensorOne < sensorOneMinValue)
 			    	{
@@ -554,7 +570,8 @@ public class Window extends JFrame
 			    		sensorOneMin.setText(df.format(data.sensorOne));
 			    	}
 			    	
-			    	sensorOneArea.append(df.format(data.sensorOne)+"\n");
+			    	//sensorOneArea.append(df.format(data.sensorOne)+"\n");
+			    	sensorOneArea.setText(df.format(data.sensorOne)+"\n");
 			    	sensorOneAve.setText(df.format((double)parsing.totalSensorOne/parsing.totalEntries));
 			    	sensorOneArea.setCaretPosition(sensorOneArea.getDocument().getLength());
 			    	
@@ -572,7 +589,7 @@ public class Window extends JFrame
 				    		sensorTwoMin.setText(df.format(data.sensorThree));
 				    	}
 				    	
-				    	sensorTwoArea.append(df.format(data.sensorTwo)+"\n");
+				    	sensorTwoArea.setText(df.format(data.sensorTwo)+"\n");
 				    	sensorTwoAve.setText(df.format((double)parsing.totalSensorTwo/parsing.totalEntries));
 				    	sensorTwoArea.setCaretPosition(sensorTwoArea.getDocument().getLength());
 				    	tempString += ",";
@@ -592,7 +609,7 @@ public class Window extends JFrame
 				    		sensorThreeMin.setText(df.format(data.sensorThree));
 				    	}
 				    	
-				    	sensorThreeArea.append(df.format(data.sensorThree)+"\n");
+				    	sensorThreeArea.setText(df.format(data.sensorThree)+"\n");
 			    		sensorThreeAve.setText(df.format((double)parsing.totalSensorThree/parsing.totalEntries));
 			    		sensorThreeArea.setCaretPosition(sensorThreeArea.getDocument().getLength());
 				    	tempString += ",";
@@ -611,7 +628,7 @@ public class Window extends JFrame
 				    		sensorFourMinValue = data.sensorFour;
 				    		sensorFourMin.setText(df.format(data.sensorFour));
 				    	}
-				    	sensorFourArea.append(df.format(data.sensorFour)+"\n");
+				    	sensorFourArea.setText(df.format(data.sensorFour)+"\n");
 				    	sensorFourAve.setText(df.format((double)parsing.totalSensorFour/parsing.totalEntries));
 				    	sensorFourArea.setCaretPosition(sensorFourArea.getDocument().getLength());
 				    	tempString += ",";
@@ -630,7 +647,7 @@ public class Window extends JFrame
 				    		sensorFiveMinValue = data.sensorFive;
 				    		sensorFiveMin.setText(df.format(data.sensorFive));
 				    	}
-				    	sensorFiveArea.append(df.format(data.sensorFive)+"\n");
+				    	sensorFiveArea.setText(df.format(data.sensorFive)+"\n");
 				    	sensorFiveAve.setText(df.format((double)parsing.totalSensorFive/parsing.totalEntries));
 				    	sensorFiveArea.setCaretPosition(sensorFiveArea.getDocument().getLength());
 				    	tempString += ",";
@@ -649,7 +666,7 @@ public class Window extends JFrame
 				    		sensorSixMinValue = data.sensorSix;
 				    		sensorSixMin.setText(df.format(data.sensorSix));
 				    	}
-				    	sensorSixArea.append(df.format(data.sensorSix)+"\n");
+				    	sensorSixArea.setText(df.format(data.sensorSix)+"\n");
 				    	sensorSixAve.setText(df.format((double)parsing.totalSensorSix/parsing.totalEntries));
 				    	sensorSixArea.setCaretPosition(sensorSixArea.getDocument().getLength());
 				    	tempString += ",";

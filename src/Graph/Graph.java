@@ -2,6 +2,7 @@ package Graph;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
@@ -119,8 +120,9 @@ public class Graph
 	public void createGraph()
 	{
 		frame = new JFrame(title);
-		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setSize(900, 584);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setSize(680, 580);
+		frame.setMinimumSize(new Dimension(680,580));
 		frame.setLocation(600,30);
 		frame.setVisible(true);
 		

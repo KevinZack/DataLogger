@@ -10,7 +10,6 @@ import Componets.Connection.ConnectButton;
 import Componets.Connection.RefreshButton;
 import Events.ICompleteConnectEventListener;
 import Main.DataManager;
-
 import javax.swing.JComboBox;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -23,6 +22,7 @@ import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenu;
+import javax.swing.JTextArea;
 
 public class Connect
 {
@@ -40,13 +40,9 @@ public class Connect
 	private JMenu mnConnection;
 	private JMenuItem mntmEmulator;
 	public JFrame frame;
-	/**
-	 * Launch the application.
-	 */
+	private JMenu mnAbout;
+	private JTextArea txtrDataloggerV;
 
-	/**
-	 * Create the frame.
-	 */
 	public Connect() {
 		frame = new JFrame("Connect");
 		
@@ -66,10 +62,32 @@ public class Connect
 				AttemptingSocket attempting = null;
 				String com = null;
 				System.out.println("Emulator");
+				frame.setVisible(false);
 				new DataManager(com,2,attempting);
 			}
 		});
+		
 		mnConnection.add(mntmEmulator);
+		
+		mnAbout = new JMenu("About");
+		menuBar.add(mnAbout);
+		
+		txtrDataloggerV = new JTextArea();
+		String aboutString = "DataLogger V1.0\n";
+		aboutString +=       "_______________\n";
+		aboutString += 		 "Author: Kevin Zack\n";
+		aboutString += 		 "_______________\n";
+		aboutString +=       "Libarys Used:  \n";
+		aboutString +=       "RXTXcomm \n";
+		aboutString +=       "froms-1.3.0 \n";
+		aboutString +=       "JFreeChart  \n";
+		aboutString +=       "JFreeCommon \n";	
+		aboutString += 		 "_______________\n";
+		aboutString += 		 "Questions? Comments?\n";
+		aboutString += 		 "KZackelectric@gmail.com";
+		
+		txtrDataloggerV.setText(aboutString);
+		mnAbout.add(txtrDataloggerV);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	

@@ -81,7 +81,7 @@ public class CreateGraph extends JFrame {
 		this.window = window;
 		setTitle("Create Graph");
 		
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setSize(500, 340);
 		this.setMinimumSize(new Dimension(length,hight));
 

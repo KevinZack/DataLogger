@@ -32,6 +32,8 @@ import com.jgoodies.forms.layout.RowSpec;
 import org.jfree.chart.plot.ValueMarker;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 public class CopyOfGraph
 {
@@ -79,7 +81,7 @@ public class CopyOfGraph
 	public ValueMarker firstMark;
 	public int firstMarkSeriesIndex;
 	public ValueMarker secondMark;
-	public int secondeMarkSeriesIndex;
+	public int secondMarkSeriesIndex;
 	public boolean priMarkSet = false;
 	public boolean secMarkSet = false;
 	public XYTextAnnotation textAnnotaion;
@@ -90,8 +92,29 @@ public class CopyOfGraph
 	public SeriesRadial seriesRadial1;
 	public SeriesRadial seriesRadial2;
 	public SeriesRadial seriesRadial3;
-	public int useSeries = 1;
 	public DecimalFormat df;
+	private JLabel lblMinimumS1;
+	private JLabel lblMaximumS1;
+	private JLabel lblIntegrationS1;
+	private JTextField minimumS1;
+	private JTextField maximumS1;
+	private JTextField integrationS1;
+	private JLabel lblSeriesS1;
+	private JLabel lblMinimumS2;
+	private JLabel lblSeriesS2;
+	private JLabel lblMaximumS2;
+	private JLabel lblIntegrationS2;
+	private JLabel lblSeriesS3;
+	private JLabel lblMinimumS3;
+	private JLabel lblMaximumS3;
+	private JLabel lblIntegrationS3;
+	private JTextField minimumS2;
+	private JTextField maximumS2;
+	private JTextField integrationS2;
+	private JTextField minimumS3;
+	private JTextField maximumS3;
+	private JTextField integrationS3;
+	
 	public CopyOfGraph(String title, String xAxisLable, String yAxisLable, XYSeries series1, XYSeries series2, XYSeries series3, int seriesNumber,int type) 
 	{
 		this.title = title;
@@ -110,43 +133,50 @@ public class CopyOfGraph
 	{	
 		BasicStroke bs = new BasicStroke(1);
 		chartPlot = chart.getXYPlot();
-		Color color;
 
-		
-		
-		if(useSeries == 1)
-		{
-			color = Color.RED;
-		}
-		else if(useSeries == 2)
-		{
-			color = Color.BLUE;
-		}
-		else
-		{
-			color = Color.GREEN;
-		}
-		
 		if(!priMarkSet && !secMarkSet)
 		{	
-			firstMark = new ValueMarker(currentX, color, bs);
+			firstMark = new ValueMarker(currentX, Color.BLACK, bs);
 			chartPlot.addDomainMarker(firstMark);
 			firstMarkSeriesIndex = seriesIndex;
 			priMarkSet = true;
 		}
 		else if (priMarkSet && !secMarkSet)
 		{
-			secondMark = new ValueMarker(currentX, color, bs);
+			secondMark = new ValueMarker(currentX, Color.BLACK, bs);
 			secMarkSet = true;
 			chartPlot.addDomainMarker(secondMark);
 
-			secondeMarkSeriesIndex = seriesIndex;
+			secondMarkSeriesIndex = seriesIndex;
 			
-			String Temp = df.format(integration(firstMarkSeriesIndex,secondeMarkSeriesIndex));
-
-			textAnnotaion = new XYTextAnnotation(Temp, chartPlot.getDomainCrosshairValue(),chartPlot.getRangeCrosshairValue());
-			textAnnotaion.setFont(new Font("Tahoma", Font.BOLD, 20));
-			chartPlot.addAnnotation(textAnnotaion);
+			String integS1 = df.format(integration(firstMarkSeriesIndex,secondMarkSeriesIndex,1));
+			String minS1 = df.format(minimum(firstMarkSeriesIndex,secondMarkSeriesIndex,1));
+			String maxS1 = df.format(maximum(firstMarkSeriesIndex,secondMarkSeriesIndex,1));
+			
+			minimumS1.setText(minS1);
+			maximumS1.setText(maxS1);
+			integrationS1.setText(integS1);
+			
+			if(seriesNumber > 1)
+			{
+				String integS2 = df.format(integration(firstMarkSeriesIndex,secondMarkSeriesIndex,2));
+				String minS2 = df.format(minimum(firstMarkSeriesIndex,secondMarkSeriesIndex,2));
+				String maxS2 = df.format(maximum(firstMarkSeriesIndex,secondMarkSeriesIndex,2));	
+				
+				minimumS2.setText(minS2);
+				maximumS2.setText(maxS2);
+				integrationS2.setText(integS2);
+			}
+			if(seriesNumber > 2)
+			{
+				String integS3 = df.format(integration(firstMarkSeriesIndex,secondMarkSeriesIndex,3));
+				String minS3 = df.format(minimum(firstMarkSeriesIndex,secondMarkSeriesIndex,3));
+				String maxS3 = df.format(maximum(firstMarkSeriesIndex,secondMarkSeriesIndex,3));	
+				
+				minimumS3.setText(minS3);
+				maximumS3.setText(maxS3);
+				integrationS3.setText(integS3);
+			}
 		}
 		else
 		{
@@ -155,16 +185,106 @@ public class CopyOfGraph
 
 			chartPlot.removeDomainMarker(firstMark);
 			chartPlot.removeDomainMarker(secondMark);
-			chartPlot.removeAnnotation(textAnnotaion);
 		}
 	}
+	
+	public double maximum(int firstMarkSeriesIndex, int secondMarkSeriesIndex, int useSeries)
+	{
+		double maximum = 0;
+		
+		if(useSeries == 1)
+		{
+			maximum = series1.getMinY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(maximum < series1.getY(i).doubleValue())
+				{
+					maximum = series1.getY(i).doubleValue();
+				}
+			}
+		}
+		
+		if(useSeries == 2)
+		{
+			maximum = series2.getMinY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(maximum < series2.getY(i).doubleValue())
+				{
+					maximum = series2.getY(i).doubleValue();
+				}
+			}
+		}
+		
+		if(useSeries == 3)
+		{
+			maximum = series3.getMinY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(maximum < series3.getY(i).doubleValue())
+				{
+					maximum = series3.getY(i).doubleValue();
+				}
+			}
+		}
+		
+		return maximum;
+	}
+	
+	public double minimum(int firstMarkSeriesIndex, int secondeMarkSeriesIndex, int useSeries)
+	{
+		double minimum = 0;
+		
+		if(useSeries == 1)
+		{
+			minimum = series1.getMaxY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(minimum > series1.getY(i).doubleValue())
+				{
+					minimum = series1.getY(i).doubleValue();
+				}
+			}
+		}
+		
+		else if(useSeries == 2)
+		{
+			minimum = series2.getMaxY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(minimum > series2.getY(i).doubleValue())
+				{
+					minimum = series2.getY(i).doubleValue();
+				}
+			}
+		}
+		else if(useSeries == 3)
+		{
+			minimum = series3.getMaxY();
+			
+			for(int i = firstMarkSeriesIndex; i <= secondMarkSeriesIndex; i++)
+			{
+				if(minimum > series3.getY(i).doubleValue())
+				{
+					minimum = series3.getY(i).doubleValue();
+				}
+			}
+		}
+		
+		return minimum;
+	}
 
-	public double integration(int firstMarkSeriesIndex, int secondeMarkSeriesIndex)
+	public double integration(int firstMarkSeriesIndex, int secondeMarkSeriesIndex, int useSeries)
 	{
 		double totalIntgration = 0;
 		if(useSeries == 1)
 		{
-			if(firstMarkSeriesIndex < secondeMarkSeriesIndex)
+			if(firstMarkSeriesIndex <= secondeMarkSeriesIndex)
 			{
 				for(int i = firstMarkSeriesIndex; i < secondeMarkSeriesIndex; i++)
 				{
@@ -186,9 +306,9 @@ public class CopyOfGraph
 		}
 		else if(useSeries == 2)
 		{
-			if(firstMarkSeriesIndex < secondeMarkSeriesIndex)
+			if(firstMarkSeriesIndex <= secondeMarkSeriesIndex)
 			{
-				for(int i = firstMarkSeriesIndex; i <= secondeMarkSeriesIndex; i++)
+				for(int i = firstMarkSeriesIndex; i < secondeMarkSeriesIndex; i++)
 				{
 					double tempX = series2.getX(i+1).doubleValue() - series2.getX(i).doubleValue();
 					double tempY = series2.getY(i+1).doubleValue() + series2.getY(i).doubleValue();
@@ -197,7 +317,7 @@ public class CopyOfGraph
 			}
 			else
 			{
-				for(int i = secondeMarkSeriesIndex; i <= firstMarkSeriesIndex; i++)
+				for(int i = secondeMarkSeriesIndex; i < firstMarkSeriesIndex; i++)
 				{
 					double tempX = series2.getX(i+1).doubleValue() - series2.getX(i).doubleValue();
 					double tempY = series2.getY(i+1).doubleValue() + series2.getY(i).doubleValue();
@@ -209,9 +329,9 @@ public class CopyOfGraph
 		}
 		else
 		{
-			if(firstMarkSeriesIndex < secondeMarkSeriesIndex)
+			if(firstMarkSeriesIndex <= secondeMarkSeriesIndex)
 			{
-				for(int i = firstMarkSeriesIndex; i <= secondeMarkSeriesIndex; i++)
+				for(int i = firstMarkSeriesIndex; i < secondeMarkSeriesIndex; i++)
 				{
 					double tempX = series3.getX(i+1).doubleValue() - series3.getX(i).doubleValue();
 					double tempY = series3.getY(i+1).doubleValue() + series3.getY(i).doubleValue();
@@ -220,7 +340,7 @@ public class CopyOfGraph
 			}
 			else
 			{
-				for(int i = secondeMarkSeriesIndex; i <= firstMarkSeriesIndex; i++)
+				for(int i = secondeMarkSeriesIndex; i < firstMarkSeriesIndex; i++)
 				{
 					double tempX = series3.getX(i+1).doubleValue() - series3.getX(i).doubleValue();
 					double tempY = series3.getY(i+1).doubleValue() + series3.getY(i).doubleValue();
@@ -240,7 +360,7 @@ public class CopyOfGraph
 	{
 		frame = new JFrame(title);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		frame.setSize(900, 584);
+		frame.setSize(759, 518);
 		frame.setLocation(600,30);
 		frame.setVisible(true);
 		
@@ -274,42 +394,136 @@ public class CopyOfGraph
 		}
 
 		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setForeground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		frame.setContentPane(contentPane);
 		contentPane.setLayout(new FormLayout(new ColumnSpec[] {
 				FormFactory.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
+				ColumnSpec.decode("default:grow"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
+				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
-				FormFactory.RELATED_GAP_COLSPEC,
-				ColumnSpec.decode("50dlu:grow"),
+				ColumnSpec.decode("50dlu"),
 				FormFactory.RELATED_GAP_COLSPEC,},
 			new RowSpec[] {
-				FormFactory.LINE_GAP_ROWSPEC,
-				RowSpec.decode("429px:grow"),
 				FormFactory.RELATED_GAP_ROWSPEC,
-				FormFactory.DEFAULT_ROWSPEC,}));
-		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, "2, 2, 11, 1, fill, fill");
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				FormFactory.DEFAULT_ROWSPEC,
+				FormFactory.RELATED_GAP_ROWSPEC,
+				RowSpec.decode("default:grow"),}));
 		
 		dataset = new XYSeriesCollection();
 		
 		dataset.addSeries(series1);
 
+		lblSeriesS1 = new JLabel("Series 1");
+		lblSeriesS1.setFont(new Font("Tahoma", Font.BOLD, 14));
+		contentPane.add(lblSeriesS1, "4, 2, 3, 1, center, center");
+		
+		lblMinimumS1 = new JLabel("Minimum");
+		contentPane.add(lblMinimumS1, "4, 4, right, center");
+		
+		minimumS1 = new JTextField();
+		contentPane.add(minimumS1, "6, 4, fill, center");
+		minimumS1.setColumns(10);
+		
+		lblMaximumS1 = new JLabel("Maximum");
+		contentPane.add(lblMaximumS1, "4, 6, right, center");
+		
+		maximumS1 = new JTextField();
+		contentPane.add(maximumS1, "6, 6, fill, default");
+		maximumS1.setColumns(10);
+		
+		lblIntegrationS1 = new JLabel("Integration");
+		contentPane.add(lblIntegrationS1, "4, 8, right, center");
+		
+		integrationS1 = new JTextField();
+		contentPane.add(integrationS1, "6, 8, fill, default");
+		integrationS1.setColumns(10);
+		
+		
+		
 		if(seriesNumber > 1)
 		{
 			dataset.addSeries(series2);
+			
+			lblSeriesS2 = new JLabel("Series 2");
+			lblSeriesS2.setFont(new Font("Tahoma", Font.BOLD, 14));
+			contentPane.add(lblSeriesS2, "4, 10, 3, 1, center, default");
+			
+			lblMinimumS2 = new JLabel("Minimum");
+			contentPane.add(lblMinimumS2, "4, 12, right, default");
+			
+			minimumS2 = new JTextField();
+			minimumS2.setColumns(10);
+			contentPane.add(minimumS2, "6, 12, fill, default");
+			
+			lblMaximumS2 = new JLabel("Maximum");
+			contentPane.add(lblMaximumS2, "4, 14, right, default");
+			
+			maximumS2 = new JTextField();
+			contentPane.add(maximumS2, "6, 14, fill, center");
+			maximumS2.setColumns(10);
+			
+			lblIntegrationS2 = new JLabel("Integration");
+			contentPane.add(lblIntegrationS2, "4, 16, right, default");
+			
+			integrationS2 = new JTextField();
+			contentPane.add(integrationS2, "6, 16, fill, default");
+			integrationS2.setColumns(10);
 		}
 		if(seriesNumber > 2)
 		{
 			dataset.addSeries(series3);
+			
+			lblSeriesS3 = new JLabel("Series 3");
+			lblSeriesS3.setFont(new Font("Tahoma", Font.BOLD, 14));
+			contentPane.add(lblSeriesS3, "4, 18, 3, 1, center, center");
+			
+			lblMinimumS3 = new JLabel("Minimum");
+			contentPane.add(lblMinimumS3, "4, 20, right, default");
+			
+			minimumS3 = new JTextField();
+			contentPane.add(minimumS3, "6, 20, fill, center");
+			minimumS3.setColumns(10);
+			
+			lblMaximumS3 = new JLabel("Maximum");
+			contentPane.add(lblMaximumS3, "4, 22, right, default");
+			
+			maximumS3 = new JTextField();
+			contentPane.add(maximumS3, "6, 22, fill, default");
+			maximumS3.setColumns(10);
+			
+			lblIntegrationS3 = new JLabel("Integration");
+			contentPane.add(lblIntegrationS3, "4, 24, right, default");
+			
+			integrationS3 = new JTextField();
+			contentPane.add(integrationS3, "6, 24, fill, default");
+			integrationS3.setColumns(10);
 		}
 	
 		ChartFactory.setChartTheme(StandardChartTheme.createLegacyTheme());
@@ -326,8 +540,11 @@ public class CopyOfGraph
 		}
 			
 		chart.setBackgroundPaint(Color.white);
+		
+		JPanel panel = new JPanel();
+		contentPane.add(panel, "2, 2, 1, 27, fill, default");
 		panel.setLayout(new BorderLayout(0, 0));
-     
+		
 		CP = new GraphChartPanel(chart);
 		
 		CP.setMaximumDrawWidth(1023);
@@ -337,7 +554,14 @@ public class CopyOfGraph
 		CP.setRefreshBuffer(true);
 		CP.setVerticalAxisTrace(false);
 		
-		panel.add(CP);
+		panel.add(CP, BorderLayout.CENTER);
+		
+		
+		
+		
+		
+		
+		
 		CP.getChart().getXYPlot().setDomainCrosshairLockedOnData(true);
 		CP.getChart().getXYPlot().setDomainCrosshairVisible(true);
 		CP.getChart().getXYPlot().setRangeCrosshairVisible(true);
@@ -356,7 +580,7 @@ public class CopyOfGraph
 			}
 		});
 		chartPlot = chart.getXYPlot();
-		frame.pack();
+		//frame.pack();
 	}
 	
 	public void close()
